@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-
-import edu.galileo.sp1.tarea1.dummy.DummyContent;
+import edu.galileo.sp1.tarea1.stores.StoreContent;
 
 /**
  * A list fragment representing a list of Stores. This fragment
@@ -67,16 +68,36 @@ public class StoreListFragment extends ListFragment {
     public StoreListFragment() {
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+//        setListAdapter(new ArrayAdapter<StoreContent.StoreItem>(
+//                getActivity(),
+//                android.R.layout.simple_list_item_activated_1,
+//                android.R.id.text1,
+//                StoreContent.STORES));
+
+        ArrayAdapter adapter = new ArrayAdapter<StoreContent.StoreItem>(
                 getActivity(),
-                android.R.layout.simple_list_item_activated_1,
+                android.R.layout.simple_list_item_2,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+                StoreContent.STORES) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+
+                text1.setText(StoreContent.STORES.get(position).getTitle());
+                text2.setText(StoreContent.STORES.get(position).getSubtitle());
+                return view;
+            }
+        };
+
+        setListAdapter(adapter);
     }
 
     @Override
@@ -116,7 +137,7 @@ public class StoreListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(StoreContent.STORES.get(position).id);
     }
 
     @Override
